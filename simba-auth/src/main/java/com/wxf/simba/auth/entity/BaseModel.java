@@ -35,8 +35,11 @@ public class BaseModel implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
+    /**
+     * 乐观锁
+     */
     @Version
-    private String version;
+    private Integer version;
 
     /**
      * 创建人
