@@ -28,7 +28,8 @@ public class GlobalMetadataHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "updateBy", String.class, null);
+        String username = SystemConstant.ADMIN_USERNAME;
+        this.strictInsertFill(metaObject, "updateBy", String.class, username);
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
     }
 }

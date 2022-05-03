@@ -20,8 +20,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("simba_sys_user")
+@TableName("simba_auth_sys_user")
 public class SysUser extends BaseModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户名
@@ -36,12 +38,12 @@ public class SysUser extends BaseModel implements Serializable {
     /**
      * 年龄
      */
-    private String age;
+    private Integer age;
 
     /**
      * 性别
      */
-    private String gender;
+    private Integer gender;
 
     /**
      * 备注

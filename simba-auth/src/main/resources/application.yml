@@ -17,7 +17,7 @@ mybatis-plus:
       logic-delete-field: deleted                           # 逻辑删除字段
       logic-delete-value: 1                                 # 逻辑删除是
       logic-not-delete-value: 0                             # 逻辑删除否
-      schema: classpath:sql/simba_auth.sql                  # Schema
+#      schema: classpath:/sql/simba_auth.sql                  # Schema
   configuration:
     map-underscore-to-camel-case: true                      # 自动驼峰转换
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 打印SQL
