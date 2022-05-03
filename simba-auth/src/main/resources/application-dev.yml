@@ -6,12 +6,10 @@ server:
 spring:
   application:
     name: simba-auth
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
   datasource:
-    url: jdbc:mysql://10.50.30.136:3306/oc_extract?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    url: jdbc:mysql://10.50.30.178:13306/oc_extract?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false
     username: root
-    password: lygr@0907
+    password: Lygr@0907
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 500
@@ -23,3 +21,8 @@ spring:
       type: com.zaxxer.hikari.HikariDataSource
       idle-timeout: 180000
       auto-commit: true
+  redis:
+    url: 10.50.30.179
+    username: admin
+    password: lygr@0907
+    port: 6379

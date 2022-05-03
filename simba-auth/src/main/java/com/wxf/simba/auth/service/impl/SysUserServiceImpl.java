@@ -1,7 +1,7 @@
 package com.wxf.simba.auth.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wxf.simba.auth.dao.SysUserMapper;
+import com.wxf.simba.auth.mapper.SysUserMapper;
 import com.wxf.simba.auth.entity.SysUser;
 import com.wxf.simba.auth.service.SysUserService;
 import org.springframework.stereotype.Service;

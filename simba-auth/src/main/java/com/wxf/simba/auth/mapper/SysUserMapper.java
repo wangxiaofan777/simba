@@ -1,4 +1,4 @@
-package com.wxf.simba.auth.dao;
+package com.wxf.simba.auth.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wxf.simba.auth.entity.SysUser;

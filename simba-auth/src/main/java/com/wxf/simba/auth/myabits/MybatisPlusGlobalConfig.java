@@ -3,6 +3,7 @@ package com.wxf.simba.auth.myabits;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2022/5/2 18:25
  */
 @Component
+@MapperScan("com.wxf.simba.auth.mapper")
 public class MybatisPlusGlobalConfig {
 
     @Bean
