@@ -10,6 +10,7 @@
     <modules>
         <module>simba-auth</module>
         <module>simba-elasticsearch</module>
+        <module>simba-admin</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -27,6 +28,7 @@
         <elasticsearch-sql.version>7.17.0</elasticsearch-sql.version>
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <redisson-spring-boot.version>3.17.1</redisson-spring-boot.version>
+        <spring-boot-admin.version>2.6.6</spring-boot-admin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -44,6 +46,18 @@
                 <version>${spring.cloud-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
             </dependency>
 
             <dependency>

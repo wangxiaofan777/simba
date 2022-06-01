@@ -28,7 +28,6 @@ spring:
     password: lygr@0907
     port: 6379
     connect-timeout: 30000
-
   # 缓存
   cache:
     redis:
@@ -43,4 +42,14 @@ spring:
       # 缓存时间
       time-to-live: 10d
     type: redis
+  boot:
+    admin:
+      client:
+        url: http://127.0.0.1:9002/simba_admin
 
+# 暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
