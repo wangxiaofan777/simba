@@ -11,6 +11,7 @@
         <module>simba-auth</module>
         <module>simba-elasticsearch</module>
         <module>simba-admin</module>
+        <module>simba-hbase</module>
     </modules>
     <packaging>pom</packaging>
 
