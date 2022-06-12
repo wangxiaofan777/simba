@@ -12,6 +12,7 @@
         <module>simba-elasticsearch</module>
         <module>simba-admin</module>
         <module>simba-hbase</module>
+        <module>simba-grpc</module>
     </modules>
     <packaging>pom</packaging>
 

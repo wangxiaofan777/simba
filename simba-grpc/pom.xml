@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>simba-hbase</artifactId>
+    <artifactId>simba-grpc</artifactId>
 
-    <name>simba-hbase</name>
+    <name>simba-grpc</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
