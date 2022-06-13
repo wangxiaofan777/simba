@@ -13,6 +13,7 @@
         <module>simba-admin</module>
         <module>simba-hbase</module>
         <module>simba-grpc</module>
+        <module>simba-redisson</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -31,6 +32,7 @@
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <redisson-spring-boot.version>3.17.1</redisson-spring-boot.version>
         <spring-boot-admin.version>2.6.6</spring-boot-admin.version>
+        <redisson.version>3.17.3</redisson.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -98,6 +100,14 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson-spring-boot.version}</version>
             </dependency>
+
+            <!-- redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
 
 
         </dependencies>
