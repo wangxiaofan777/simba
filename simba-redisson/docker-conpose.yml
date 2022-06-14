@@ -7,11 +7,11 @@ services:
     ports:
       - "9001:6379"
     command:
-      - redis-server /etc/redis/redis.config
+      - redis-server /usr/local/etc/redis/redis.config
     volumes:
       - redis_data:/data
       - redis_logs:/logs
-      - redis_config/redis.config:/etc/redis/redis.config
+#      - ./config:/usr/local/etc/redis
     environment:
       - TZ=Asia/Shanghai
     privileged: true
@@ -23,6 +23,3 @@ volumes:
   redis_logs:
     external:
       name: redis_logs
-  redis_config:
-    external:
-      name: redis_config
