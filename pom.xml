@@ -14,6 +14,7 @@
         <module>simba-hbase</module>
         <module>simba-grpc</module>
         <module>simba-redisson</module>
+        <module>simba-fileupload</module>
     </modules>
     <packaging>pom</packaging>
 
