@@ -64,16 +64,12 @@ public class RedissonManager {
     }
 
     public static Object getBucket(String name) {
-        if (redissonClient.getBucket(name).isExists()) {
+        if (!redissonClient.getBucket(name).isExists()) {
             return null;
         }
         return redissonClient.getBucket(name).get();
     }
 
-
-    public static void test01() {
-        System.out.println(config);
-    }
 
     public static void main(String[] args) {
 //        RedissonManager.setBucket("b1", new JSONObject(1).fluentPut("name", "wms").fluentPut("age", 30));

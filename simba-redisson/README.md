@@ -165,6 +165,90 @@ chmod +x /etc/init.d/redisd
 
 ### 2. 主从安装
 
+#### 2.1 master配置
+```yaml
+port 6379
+# 默认绑定
+bind 0.0.0.0
+# 是否守护进程启动
+daemonize yes
+# 日志级别：notice或者debug(开发)
+loglevel notice
+# 日志文件
+logfile "/data/redis/logs/redis_6379.log"
+# data路径
+dir /data/redis/data
+# 线程
+pidfile /var/run/redis_6379.pid
+# 开启日志Append
+appendonly yes
+
+maxmemory 2gb
+# aof文件名
+appendfilename "appendonly.aof"
+# 同步写入策略 always、everysec、no
+appendfsync everysec
+
+# RDB
+save 900 1
+save 300 10
+save 60 10000 
+# rdb文件名
+dbfilename dump.rdb
+# Redis默认是开启压缩的。
+rdbcompression yes
+# 用户密码
+user admin on -DEBUG +@all ~* >lygr@0907
+requirepass lygr@0907
+#replicaof 10.50.30.177 6379 
+masterauth lygr@0907
+replica-read-only no
+# 删除策略
+maxmemory-policy volatile-lru
+```
+#### 2.2 slave配置
+```yaml
+
+port 6379
+# 默认绑定
+bind 0.0.0.0
+# 是否守护进程启动
+daemonize yes
+# 日志级别：notice或者debug(开发)
+loglevel notice
+# 日志文件
+logfile "/data/redis/logs/redis_6379.log"
+# data路径
+dir /data/redis/data
+# 线程
+pidfile /var/run/redis_6379.pid
+# 开启日志Append
+appendonly yes
+# 最大使用内存
+maxmemory 1048576
+# aof文件名
+appendfilename "appendonly.aof"
+# 同步写入策略 always、everysec、no
+appendfsync everysec
+
+# RDB
+save 900 1
+save 300 10
+save 60 10000 
+# rdb文件名
+dbfilename dump.rdb
+# Redis默认是开启压缩的。
+rdbcompression yes
+# 用户密码
+user admin on -DEBUG +@all ~* >lygr@0907
+requirepass lygr@0907
+
+replicaof 10.50.30.177 6379
+masteruser admin
+masterauth lygr@0907
+replica-serve-stale-data yes
+
+```
 
 ### 3. cluster安装 
 
