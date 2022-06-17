@@ -2,10 +2,12 @@ package com.wxf.redisson;
 
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
+import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
 import java.io.IOException;
+import java.util.BitSet;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -59,10 +61,49 @@ public class RedissonManager {
      * @param timeToLive 存活时间
      * @param timeUnit   时间单位
      */
-    public static void setBucketExpire(String name, Object value, long timeToLive, TimeUnit timeUnit) {
+    public static void setBucket(String name, Object value, long timeToLive, TimeUnit timeUnit) {
         redissonClient.getBucket(name).set(value, timeToLive, timeUnit);
     }
 
+    public static void trySet(String name, Object value) {
+        RBucket<Object> bucket = redissonClient.getBucket(name);
+        bucket.trySet(value);
+    }
+
+    public static void trySet(String name, Object value, long timeToLive, TimeUnit timeUnit) {
+        RBucket<Object> bucket = redissonClient.getBucket(name);
+        bucket.trySet(value, timeToLive, timeUnit);
+    }
+
+    public static void trySetAsync(String name, Object value) {
+        RBucket<Object> bucket = redissonClient.getBucket(name);
+        bucket.trySetAsync(value);
+    }
+
+
+    public static void trySetAsync(String name, Object value, long timeToLive, TimeUnit timeUnit) {
+        RBucket<Object> bucket = redissonClient.getBucket(name);
+        bucket.trySetAsync(value, timeToLive, timeUnit);
+    }
+
+
+    public static void compareAndSet(String name, Object value, Object newValue) {
+        RBucket<Object> bucket = redissonClient.getBucket(name);
+        bucket.compareAndSet(value, newValue);
+    }
+
+
+    public static void getAndSet(String name, Object value) {
+        RBucket<Object> bucket = redissonClient.getBucket(name);
+        bucket.getAndSet(value);
+    }
+
+    /**
+     * 获取bucket对象
+     *
+     * @param name 键
+     * @return bucket对象
+     */
     public static Object getBucket(String name) {
         if (!redissonClient.getBucket(name).isExists()) {
             return null;
@@ -71,14 +112,40 @@ public class RedissonManager {
     }
 
 
-    public static void main(String[] args) {
-//        RedissonManager.setBucket("b1", new JSONObject(1).fluentPut("name", "wms").fluentPut("age", 30));
+    /*  Binary Stream  */
 
-        System.out.println(RedissonManager.getBucket("b1"));
+    public static void setBinaryStream(String name, byte[] bytes) {
+        redissonClient.getBinaryStream(name).set(bytes);
+    }
+
+    public static byte[] getBinaryStream(String name) {
+        return redissonClient.getBinaryStream(name).get();
     }
 
 
-    private void close() {
+    /* bitset  */
+    public static void setBitSet(String name, BitSet bitSet) {
+        redissonClient.getBitSet(name).set(bitSet);
+    }
+
+    public static BitSet getBitSet(String name) {
+        return redissonClient.getBitSet(name).asBitSet();
+    }
+
+
+
+    public static void main(String[] args) {
+//        RedissonManager.setBucket("b1", new JSONObject(1).fluentPut("name", "wms").fluentPut("age", 30));
+//        RedissonManager.setBucket("b1", new JSONObject(1).fluentPut("name", "wms").fluentPut("age", 30), 10L, TimeUnit.MINUTES);
+
+        System.out.println(RedissonManager.getBucket("b1"));
+
+
+        close();
+    }
+
+
+    private static void close() {
         redissonClient.shutdown();
     }
 }
