@@ -2,7 +2,9 @@ package com.wxf.redisson;
 
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
+import org.redisson.api.ExecutorOptions;
 import org.redisson.api.RBucket;
+import org.redisson.api.RExecutorService;
 import org.redisson.api.RLiveObjectService;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -141,6 +143,15 @@ public class RedissonManager {
      */
     public static RLiveObjectService getLiveObjectService() {
         return redissonClient.getLiveObjectService();
+    }
+
+
+    public static RExecutorService rExecutorService(String name, ExecutorOptions options) {
+        return redissonClient.getExecutorService(name, options);
+    }
+
+    public static RExecutorService rExecutorService(String name) {
+        return redissonClient.getExecutorService(name);
     }
 
 
