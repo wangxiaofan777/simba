@@ -3,6 +3,7 @@ package com.wxf.redisson;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
+import org.redisson.api.RLiveObjectService;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
@@ -132,6 +133,15 @@ public class RedissonManager {
         return redissonClient.getBitSet(name).asBitSet();
     }
 
+
+    /**
+     * 获取分布式服务对象（RLO）
+     *
+     * @return 分布式服务对象
+     */
+    public static RLiveObjectService getLiveObjectService() {
+        return redissonClient.getLiveObjectService();
+    }
 
 
     public static void main(String[] args) {
