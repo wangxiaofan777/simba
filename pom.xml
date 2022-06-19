@@ -15,6 +15,7 @@
         <module>simba-grpc</module>
         <module>simba-redisson</module>
         <module>simba-fileupload</module>
+        <module>simba-test</module>
     </modules>
     <packaging>pom</packaging>
 
