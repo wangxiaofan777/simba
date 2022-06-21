@@ -17,6 +17,7 @@
         <module>simba-fileupload</module>
         <module>simba-test</module>
         <module>simba-websocket</module>
+        <module>simba-spark</module>
     </modules>
     <packaging>pom</packaging>
 
