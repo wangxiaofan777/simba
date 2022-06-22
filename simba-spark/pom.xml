@@ -331,6 +331,7 @@
                     <sourceIncludes>
                         <sourceInclude>**/*.scala</sourceInclude>
                         <sourceInclude>**/*.java</sourceInclude>
+                        <sourceInclude>conf/*</sourceInclude>
                     </sourceIncludes>
                 </configuration>
             </plugin>
