@@ -47,9 +47,25 @@ spring:
       client:
         url: http://127.0.0.1:9002/simba_admin
 
+# 日志配置
+logging:
+  config: classpath:log4j2.xml
+
 # 暴露端点
 management:
   endpoints:
     web:
       exposure:
         include: '*'
+  endpoint:
+    health:
+      enabled: true
+      show-details: ALWAYS
+    logfile:
+      enabled: true
+      external-file: D:\workspace\work2021\simba\simba-auth\logs\simba_auth-info.log
+
+
+
+
+
