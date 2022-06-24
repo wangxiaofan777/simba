@@ -1,30 +1,13 @@
 package com.wxf
 
-import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import org.elasticsearch.spark.rdd.EsSpark
 
 object LoadHiveData2Es {
 
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf()
-    conf.set("es.nodes", "10.50.30.177")
-    conf.set("es.port", "9500")
-    conf.set("es.index.auto.create", "true")
-
-    val session: SparkSession = SparkSession.builder().config(conf).appName("LoadHiveData2Es").master("yarn").enableHiveSupport().getOrCreate()
-    //    val sc: SQLContext = session.sqlContext
-    //    val rowRdd: JavaRDD[Row] = sc.sql("select * from cmk.tablea").toJavaRDD
-    val sc = session.sparkContext
-    val value = sc.makeRDD(
-      Seq(Person("zhangsan", 1), Person("lisi", 2), Person("wangwu", 3))
-    )
-
-    EsSpark.saveToEs(value, "test")
-
+    val session: SparkSession = SparkSession.builder().appName("LoadHiveData2Es").master("yarn").enableHiveSupport().getOrCreate()
+    session.sql("insert into wms.tablea select * from cmk.tablea;").show()
     session.stop()
   }
-
-  case class Person(name: String, age: Int)
 
 }
