@@ -18,6 +18,8 @@
         <module>simba-test</module>
         <module>simba-websocket</module>
         <module>simba-spark</module>
+        <module>simba-hive</module>
+        <module>simba-flink</module>
     </modules>
     <packaging>pom</packaging>
 
