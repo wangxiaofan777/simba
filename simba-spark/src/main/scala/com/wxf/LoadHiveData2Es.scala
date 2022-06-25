@@ -14,7 +14,7 @@ object LoadHiveData2Es {
     conf.set("es.port", "9500")
     conf.set("es.index.auto.create", "true")
     val session: SparkSession = SparkSession.builder().config(conf).appName("LoadHiveData2Es").master("yarn").enableHiveSupport().getOrCreate()
-    val javaRDD: JavaRDD[Row] = session.sql("insert into wms.tablea select * from cmk.tablea;").toJavaRDD
+    val javaRDD: JavaRDD[Row] = session.sql("select * from cmk.tablea;").toJavaRDD
     val rdd: JavaRDD[Map[String, String]] = javaRDD.map(x => {
       Map(
         "phone" -> x.getAs[String]("phone"),
@@ -41,12 +41,9 @@ object LoadHiveData2Es {
         "a20" -> x.getAs[String]("a20")
       )
     })
-    val sc: SparkContext = session.sparkContext
-    val value: RDD[JavaRDD[Map[String, String]]] = sc.makeRDD(
-      Seq(rdd)
-    )
 
-    EsSpark.saveToEs(value, "tablea");
+
+    EsSpark.saveToEs(rdd, "tablea");
 
     session.stop()
   }
