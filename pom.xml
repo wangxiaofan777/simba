@@ -20,6 +20,7 @@
         <module>simba-spark</module>
         <module>simba-hive</module>
         <module>simba-flink</module>
+        <module>simba-tidb</module>
     </modules>
     <packaging>pom</packaging>
 
