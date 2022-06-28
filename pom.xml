@@ -21,6 +21,7 @@
         <module>simba-hive</module>
         <module>simba-flink</module>
         <module>simba-tidb</module>
+        <module>simba-netty</module>
     </modules>
     <packaging>pom</packaging>
 
