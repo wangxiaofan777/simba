@@ -23,6 +23,7 @@
         <module>simba-tidb</module>
         <module>simba-netty</module>
         <module>simba-commons</module>
+        <module>simba-nio</module>
     </modules>
     <packaging>pom</packaging>
 
