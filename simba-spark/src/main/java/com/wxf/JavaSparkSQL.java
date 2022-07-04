@@ -29,7 +29,7 @@ public class JavaSparkSQL {
          */
         Dataset<Row> df = spark.read()
                 .format("org.apache.spark.sql.execution.datasources.json.JsonFileFormat")
-                .json("D:\\workspace\\work2021\\simba\\simba-spark\\src\\main\\resources\\users.parquet");
+                .load("D:\\workspace\\work2021\\simba\\simba-spark\\src\\main\\resources\\people.json");
 
         df.show();
     }
