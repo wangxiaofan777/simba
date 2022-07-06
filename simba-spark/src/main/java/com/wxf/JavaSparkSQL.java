@@ -2,17 +2,24 @@ package com.wxf;
 
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.apache.spark.sql.functions.col;
 
@@ -28,7 +35,8 @@ public class JavaSparkSQL {
                 .getOrCreate();
 //        runBasicDataFrameExample(spark);
 //        runDatasetCreationExample(spark);
-        runInferSchemaExample(spark);
+//        runInferSchemaExample(spark);
+        runProgrammaticSchemaExample(spark);
 
         spark.stop();
     }
@@ -124,6 +132,35 @@ public class JavaSparkSQL {
         }, stringEncoder);
 
         teenagerNamesByFieldDF.show();
+
+    }
+
+    private static void runProgrammaticSchemaExample(SparkSession spark) {
+        JavaRDD<String> peopleRDD = spark.sparkContext()
+                .textFile("D:\\workspace\\work2021\\simba\\simba-spark\\src\\main\\resources\\people.txt", 1)
+                .toJavaRDD();
+
+        String schemaString = "name age";
+        List<StructField> fields = new ArrayList<>();
+        for (String field : schemaString.split("\\w+")) {
+            StructField structField = DataTypes.createStructField(field, DataTypes.StringType, true);
+            fields.add(structField);
+        }
+
+        StructType schema = DataTypes.createStructType(fields);
+
+        JavaRDD<Row> rowRDD = peopleRDD.map((Function<String, Row>) record -> {
+            String[] attributes = record.split(",");
+            return RowFactory.create(attributes[0], attributes[1].trim());
+        });
+        Dataset<Row> peopleDataDF = spark.createDataFrame(rowRDD, schema);
+        peopleDataDF.createOrReplaceTempView("people");
+
+        Dataset<Row> results = spark.sql("select * from people");
+
+        Dataset<String> namesDS = results.map((MapFunction<Row, String>) row -> "Name: " + row.getString(0), Encoders.STRING());
+
+        namesDS.show();
 
     }
 
