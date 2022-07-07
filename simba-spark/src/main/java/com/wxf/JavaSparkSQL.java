@@ -124,12 +124,7 @@ public class JavaSparkSQL {
         Dataset<String> teenagerNamesByIndexDF = teenagersDF.map((MapFunction<Row, String>) row -> row.getString(1), stringEncoder);
         teenagerNamesByIndexDF.show();
 
-        Dataset<String> teenagerNamesByFieldDF = teenagersDF.map(new MapFunction<Row, String>() {
-            @Override
-            public String call(Row row) throws Exception {
-                return row.getAs("name");
-            }
-        }, stringEncoder);
+        Dataset<String> teenagerNamesByFieldDF = teenagersDF.map((MapFunction<Row, String>) row -> row.getAs("name"), stringEncoder);
 
         teenagerNamesByFieldDF.show();
 
