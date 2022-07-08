@@ -1,10 +1,9 @@
 ### 0. 环境配置
+
 * SSH免密登录
 * 调整ssh连接数
-  * 修改 /etc/ssh/sshd_config 将 MaxSessions 调至 20。
-  * 重启sshd服务：service sshd restart
-
-
+    * 修改 /etc/ssh/sshd_config 将 MaxSessions 调至 20。
+    * 重启sshd服务：service sshd restart
 
 ### 1. 下载安装
 
@@ -97,4 +96,16 @@ tiup cluster deploy tidb_test 6.1.0 ./topo.yaml --user root -p
 
 ```shell
 tiup cluster start tidb_test --init
+```
+
+### 6. 查看已部署集群
+
+```shell
+tiup cluster list
+```
+
+### 7. 查看集群拓扑结构
+
+```shell
+tiup cluster display tidb_test
 ```
