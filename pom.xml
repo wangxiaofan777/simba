@@ -24,6 +24,7 @@
         <module>simba-netty</module>
         <module>simba-commons</module>
         <module>simba-nio</module>
+        <module>simba-mongo</module>
     </modules>
     <packaging>pom</packaging>
 
