@@ -27,6 +27,8 @@
         <module>simba-mongo</module>
         <module>simba-gateway</module>
         <module>simba-go</module>
+        <module>simba-auth-server</module>
+        <module>simba-order-service</module>
     </modules>
     <packaging>pom</packaging>
 
