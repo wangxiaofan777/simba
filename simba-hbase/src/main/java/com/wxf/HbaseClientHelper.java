@@ -18,18 +18,26 @@ import java.io.IOException;
 public class HbaseClientHelper {
 
     private static volatile Connection connection = null;
-    private static Configuration config = null;
+    private static Configuration configuration = null;
 
 
     static {
 
-        System.setProperty("java.security.krb5.conf", "D:\\workspace\\work2021\\simba\\config\\krb5.conf");
-        config = HBaseConfiguration.create();
-        config.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
-        config.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
-        UserGroupInformation.setConfiguration(config);
+        System.setProperty("java.security.krb5.conf", "D:/workspace/work2021/simba/config/krb5.conf");
+        configuration = HBaseConfiguration.create();
+        configuration.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
+        configuration.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
+
+        configuration.set("hadoop.security.authentication" , "Kerberos" );
+        // 这个hbase.keytab也是从远程服务器上copy下来的, 里面存储的是密码相关信息
+        // 这样我们就不需要交互式输入密码了
+        configuration.set("keytab.file" , "D:/workspace/work2021/simba/config/root.keytab" );
+        // 这个可以理解成用户名信息，也就是Principal
+        configuration.set("kerberos.principal" , "admin/admin@HADOOP.COM" );
+
+        UserGroupInformation.setConfiguration(configuration);
         try {
-            UserGroupInformation.loginUserFromKeytab("admin/admin@HADOOP.COM", "D:\\workspace\\work2021\\simba\\config\\root.keytab");
+            UserGroupInformation.loginUserFromKeytab("admin/admin@HADOOP.COM", "D:/workspace/work2021/simba/config/root.keytab");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,7 +79,7 @@ public class HbaseClientHelper {
         if (connection == null) {
             synchronized (HbaseClientHelper.class) {
                 if (connection == null) {
-                    connection = ConnectionFactory.createConnection(config);
+                    connection = ConnectionFactory.createConnection(configuration);
                 }
             }
         }
