@@ -1,0 +1,31 @@
+// 定义使用的版本
+syntax = "proto3";
+
+// 是否生成多个文件
+option java_multiple_files = true;
+// 代码生成后的命名空间
+option java_package = "com.wxf.helloworld.proto";
+// 生成后的类名
+option java_outer_classname = "HelloWorldProto";
+// 对象前缀
+option objc_class_prefix = "HLW";
+
+
+// proto文件的命名空间
+package helloworld;
+
+
+// 定义接口
+service Greeter{
+  rpc sayHello(HelloRequest) returns(HelloReply){}
+}
+
+// 请求
+message HelloRequest{
+  string name = 1;
+}
+
+// 响应
+message HelloReply {
+  string message = 1;
+}
