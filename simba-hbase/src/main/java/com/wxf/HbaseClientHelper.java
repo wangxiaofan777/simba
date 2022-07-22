@@ -7,10 +7,13 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.TableDescriptor;
 import org.apache.hadoop.security.UserGroupInformation;
 
 import java.io.IOException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Arrays;
 
 /**
  * Hello world!
@@ -22,25 +25,10 @@ public class HbaseClientHelper {
 
 
     static {
-
-        System.setProperty("java.security.krb5.conf", "D:/workspace/work2021/simba/config/krb5.conf");
         configuration = HBaseConfiguration.create();
-        configuration.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
-        configuration.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
-
-        configuration.set("hadoop.security.authentication" , "Kerberos" );
-        // 这个hbase.keytab也是从远程服务器上copy下来的, 里面存储的是密码相关信息
-        // 这样我们就不需要交互式输入密码了
-        configuration.set("keytab.file" , "D:/workspace/work2021/simba/config/root.keytab" );
-        // 这个可以理解成用户名信息，也就是Principal
-        configuration.set("kerberos.principal" , "admin/admin@HADOOP.COM" );
-
-        UserGroupInformation.setConfiguration(configuration);
-        try {
-            UserGroupInformation.loginUserFromKeytab("admin/admin@HADOOP.COM", "D:/workspace/work2021/simba/config/root.keytab");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        configuration.addResource(new Path("D:/workspace/work2021/simba/config/hbase-site.xml"));
+        configuration.addResource(new Path("D:/workspace/work2021/simba/config/core-site.xml"));
+        configuration.addResource(new Path("D:/workspace/work2021/simba/config/hdfs-site.xml"));
         init();
     }
 
@@ -52,8 +40,10 @@ public class HbaseClientHelper {
      */
     public static Connection init() {
         try {
+            UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI("admin/admin@HADOOP.COM", "D:/workspace/work2021/simba/config/root.keytab");
+            ugi.doAs((PrivilegedExceptionAction<Connection>) HbaseClientHelper::getConnection);
             return getConnection();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -109,9 +99,11 @@ public class HbaseClientHelper {
     }
 
     public static void listTableNames() throws IOException {
-        for (TableName tableName : HbaseClientHelper.admin().listTableNames()) {
-            System.out.println(tableName);
-        }
+        Table test = connection.getTable(TableName.valueOf("test"));
+        Admin admin = connection.getAdmin();
+
+        System.out.println(Arrays.toString(admin.listTableNames()));
+
     }
 
 
