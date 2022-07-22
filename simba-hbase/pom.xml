@@ -20,20 +20,19 @@
     </properties>
 
     <dependencies>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+        <!-- hbase-client -->
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
-            <version>2.1.0-cdh6.3.2</version>
         </dependency>
 
+        <!-- hocon config-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <build>

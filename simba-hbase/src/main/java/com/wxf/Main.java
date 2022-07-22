@@ -1,5 +1,8 @@
 package com.wxf;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 /**
  * @author WangMaoSong
  * @date 2022/7/20 18:17
@@ -7,13 +10,12 @@ package com.wxf;
 public class Main {
 
     public static void main(String[] args) {
-        System.setProperty("HBASE_CONF_DIR", "t1");
-        System.setProperty("HADOOP_CONF_DIR", "t1");
+        Config config = ConfigFactory.load();
+        Config hbaseConfig = config.getConfig("hbase");
+        System.out.println(hbaseConfig.getString("a"));
+        System.out.println(hbaseConfig.getString("b"));
+        System.out.println(hbaseConfig.getString("c"));
 
 
-        System.out.println(System.getenv("HBASE_CONF_DIR"));
-        System.out.println(System.getenv("HADOOP_CONF_DIR"));
-
-//        System.getenv().forEach((k, v) -> System.out.println(k + "----->" + v));
     }
 }

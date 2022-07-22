@@ -1,5 +1,6 @@
 package com.wxf;
 
+import com.wxf.config.HbaseConfig;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -13,7 +14,6 @@ import org.apache.hadoop.security.UserGroupInformation;
 
 import java.io.IOException;
 import java.security.PrivilegedExceptionAction;
-import java.util.Arrays;
 
 /**
  * Hello world!
@@ -22,13 +22,15 @@ public class HbaseClientHelper {
 
     private static volatile Connection connection = null;
     private static Configuration configuration = null;
+    private static final HbaseConfig hBaseConfig;
 
 
     static {
+        hBaseConfig = HbaseConfig.load();
         configuration = HBaseConfiguration.create();
-        configuration.addResource(new Path("D:/workspace/work2021/simba/config/hbase-site.xml"));
-        configuration.addResource(new Path("D:/workspace/work2021/simba/config/core-site.xml"));
-        configuration.addResource(new Path("D:/workspace/work2021/simba/config/hdfs-site.xml"));
+        configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/hbase-site.xml"));
+        configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/core-site.xml"));
+        configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/hdfs-site.xml"));
         init();
     }
 
@@ -40,7 +42,7 @@ public class HbaseClientHelper {
      */
     public static Connection init() {
         try {
-            UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI("admin/admin@HADOOP.COM", "D:/workspace/work2021/simba/config/root.keytab");
+            UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(hBaseConfig.getPrincipal(), hBaseConfig.getKeytab());
             ugi.doAs((PrivilegedExceptionAction<Connection>) HbaseClientHelper::getConnection);
             return getConnection();
         } catch (Exception e) {
@@ -102,7 +104,7 @@ public class HbaseClientHelper {
         Table test = connection.getTable(TableName.valueOf("test"));
         Admin admin = connection.getAdmin();
 
-        System.out.println(Arrays.toString(admin.listTableNames()));
+        System.out.println(test);
 
     }
 

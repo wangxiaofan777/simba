@@ -50,6 +50,8 @@
         <redisson.version>3.17.3</redisson.version>
         <commons-io.version>2.11.0</commons-io.version>
         <spring-cloud-gateway.version>3.1.3</spring-cloud-gateway.version>
+        <hbase.version>2.1.0-cdh6.3.2</hbase.version>
+        <hocon.version>1.4.2</hocon.version>
 
     </properties>
     <dependencyManagement>
@@ -146,6 +148,20 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+
+            <!-- hbase-client -->
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-client</artifactId>
+                <version>${hbase.version}</version>
+            </dependency>
+
+            <!-- hocon config-->
+            <dependency>
+                <groupId>com.typesafe</groupId>
+                <artifactId>config</artifactId>
+                <version>${hocon.version}</version>
             </dependency>
 
 
