@@ -2,7 +2,6 @@ package com.wxf;
 
 import com.wxf.config.HbaseConfig;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
@@ -15,13 +14,11 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.TableDescriptor;
 import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.kerby.kerberos.kerb.admin.kadmin.remote.AdminClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.PrivilegedExceptionAction;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,16 +32,16 @@ public class HbaseClientHelper {
 
     private static volatile Connection connection = null;
     private static Configuration configuration = null;
-    private static final HbaseConfig hBaseConfig;
-
+    private static final HbaseConfig hbaseConfig;
 
     static {
-        hBaseConfig = HbaseConfig.load();
+        hbaseConfig = HbaseConfig.load();
+        System.setProperty("java.security.krb5.conf", hbaseConfig.getKrb5());
         configuration = HBaseConfiguration.create();
-        configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/hbase-site.xml"));
-        configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/core-site.xml"));
-        configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/hdfs-site.xml"));
-        logger.info("hbase connection init start....");
+
+        UserGroupInformation.setConfiguration(configuration);
+
+        logger.info("hbase connection initializing....");
         init();
         logger.info("hbase connection init successful....");
     }
@@ -57,8 +54,8 @@ public class HbaseClientHelper {
      */
     public static Connection init() {
         try {
-            UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(hBaseConfig.getPrincipal(), hBaseConfig.getKeytab());
-            return ugi.doAs((PrivilegedExceptionAction<Connection>) HbaseClientHelper::getConnection);
+            UserGroupInformation.loginUserFromKeytab(hbaseConfig.getPrincipal(), hbaseConfig.getKeytab());
+            return getConnection();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -136,16 +133,17 @@ public class HbaseClientHelper {
      */
     public static void put(String tableName) throws IOException {
         Table table = connection.getTable(TableName.valueOf(tableName));
-
         Put put = new Put("wms".getBytes(StandardCharsets.UTF_8));
         table.put(put);
-
-
     }
 
 
     public static void main(String[] args) throws IOException {
+        for (TableName tableName : listTableNames()) {
+            System.out.println(tableName.getNameAsString());
+        }
 //        createTable("wms", "t1", "t2", "t3");
+        close();
 //        put("test");
     }
 

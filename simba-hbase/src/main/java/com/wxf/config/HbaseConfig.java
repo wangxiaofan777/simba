@@ -29,6 +29,11 @@ public class HbaseConfig {
      */
     private String keytab;
 
+    /**
+     * krb5文件配置
+     */
+    private String krb5;
+
 
     /**
      * 加載Hbase配置
@@ -41,6 +46,7 @@ public class HbaseConfig {
         hBaseConfig.setConfigPath(config.getString("configPath"));
         hBaseConfig.setPrincipal(config.getString("principal"));
         hBaseConfig.setKeytab(config.getString("keytab"));
+        hBaseConfig.setKrb5(config.getString("krb5"));
         return hBaseConfig;
     }
 
@@ -74,4 +80,11 @@ public class HbaseConfig {
         this.keytab = keytab;
     }
 
+    public String getKrb5() {
+        return krb5;
+    }
+
+    public void setKrb5(String krb5) {
+        this.krb5 = krb5;
+    }
 }
