@@ -9,7 +9,9 @@ import org.apache.hadoop.hbase.client.ColumnFamilyDescriptor;
 import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.TableDescriptor;
 import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
@@ -33,7 +35,7 @@ public class HbaseClientHelper {
     private static final Logger logger = LoggerFactory.getLogger(HbaseClientHelper.class);
 
     private static volatile Connection connection = null;
-    private static Configuration configuration;
+    private static final Configuration configuration;
     private static final HbaseConfig hbaseConfig;
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(10);
 
@@ -60,8 +62,8 @@ public class HbaseClientHelper {
     public static void init() {
         try {
             UserGroupInformation.loginUserFromKeytab(hbaseConfig.getPrincipal(), hbaseConfig.getKeytab());
-            ADMIN = connection.getAdmin();
             getConnection();
+            ADMIN = connection.getAdmin();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -134,19 +136,72 @@ public class HbaseClientHelper {
      * 保存数据
      *
      * @param tableName 表名
+     * @param rowKey    rowKey
+     * @param colFamily 列族
+     * @param column    列名
+     * @param value     值
+     * @throws IOException 异常
      */
-    public static void put(String tableName) throws IOException {
+    public static void insertRow(String tableName, String rowKey, String colFamily, String column, String value) throws IOException {
         Table table = connection.getTable(TableName.valueOf(tableName));
-        Put put = new Put("wms".getBytes(StandardCharsets.UTF_8));
+        Put put = new Put(rowKey.getBytes());
+        put.addColumn(colFamily.getBytes(), column.getBytes(), value.getBytes());
         table.put(put);
+    }
+
+    /**
+     * 刪除数据
+     *
+     * @param tableName 表名
+     * @param rowKey    rowKey
+     * @param colFamily 列族
+     * @param column    列名
+     * @throws IOException 异常
+     */
+    public static void deleteRow(String tableName, String rowKey, String colFamily, String column) throws IOException {
+        Table table = connection.getTable(TableName.valueOf(tableName));
+        Delete delete = new Delete(rowKey.getBytes());
+        delete.addColumn(colFamily.getBytes(), column.getBytes());
+        table.delete(delete);
+    }
+
+    /**
+     * 查询
+     *
+     * @param tableName 表名
+     * @param colFamily 列名
+     * @return 返回值
+     * @throws IOException 异常
+     */
+    public static ResultScanner selectRows(String tableName, String colFamily) throws IOException {
+        Table table = connection.getTable(TableName.valueOf(tableName));
+        return table.getScanner(colFamily.getBytes());
+    }
+
+
+    /**
+     * 删除表
+     *
+     * @param tableName 表名
+     * @throws IOException 异常
+     */
+    public static void dropTable(String tableName) throws IOException {
+        TableName tb = TableName.valueOf(tableName);
+        logger.info("disable table {}", tableName);
+        ADMIN.disableTable(tb);
+        logger.info("delete table {}", tableName);
+        ADMIN.deleteTable(tb);
     }
 
 
     public static void main(String[] args) throws IOException {
-        for (TableName tableName : listTableNames()) {
+        /*for (TableName tableName : listTableNames()) {
             System.out.println(tableName.getNameAsString());
-        }
-//        createTable("wms", "t1", "t2", "t3");
+        }*/
+        createTable("wms", "t1", "t2", "t3");
+        insertRow("wms", "r1", "t1", "c1", "v1");
+//        deleteRow("wms", "r1", "t1", "c1");
+//        dropTable("wms");
         close();
 //        put("test");
     }
