@@ -52,6 +52,7 @@
         <spring-cloud-gateway.version>3.1.3</spring-cloud-gateway.version>
         <hbase.version>2.1.0-cdh6.3.2</hbase.version>
         <hocon.version>1.4.2</hocon.version>
+        <log4j2.version>2.17.2</log4j2.version>
 
     </properties>
     <dependencyManagement>
@@ -162,6 +163,18 @@
                 <groupId>com.typesafe</groupId>
                 <artifactId>config</artifactId>
                 <version>${hocon.version}</version>
+            </dependency>
+
+            <!--日志-->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j2.version}</version>
             </dependency>
 
 

@@ -6,19 +6,32 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptor;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.TableDescriptor;
+import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.apache.kerby.kerberos.kerb.admin.kadmin.remote.AdminClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.PrivilegedExceptionAction;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Hello world!
  */
 public class HbaseClientHelper {
+
+    private static final Logger logger = LoggerFactory.getLogger(HbaseClientHelper.class);
 
     private static volatile Connection connection = null;
     private static Configuration configuration = null;
@@ -31,7 +44,9 @@ public class HbaseClientHelper {
         configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/hbase-site.xml"));
         configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/core-site.xml"));
         configuration.addResource(new Path(hBaseConfig.getConfigPath() + "/hdfs-site.xml"));
+        logger.info("hbase connection init start....");
         init();
+        logger.info("hbase connection init successful....");
     }
 
     private HbaseClientHelper() {
@@ -43,8 +58,7 @@ public class HbaseClientHelper {
     public static Connection init() {
         try {
             UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(hBaseConfig.getPrincipal(), hBaseConfig.getKeytab());
-            ugi.doAs((PrivilegedExceptionAction<Connection>) HbaseClientHelper::getConnection);
-            return getConnection();
+            return ugi.doAs((PrivilegedExceptionAction<Connection>) HbaseClientHelper::getConnection);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -93,25 +107,46 @@ public class HbaseClientHelper {
     /**
      * 创建表
      *
-     * @param desc 表描述
+     * @param tableName 表名
+     * @param columns   列名
      * @throws IOException 异常
      */
-    public static void createTable(TableDescriptor desc) throws IOException {
-        HbaseClientHelper.admin().createTable(desc);
+    public static void createTable(String tableName, String... columns) throws IOException {
+        Set<ColumnFamilyDescriptor> columnFamilyDescriptorSet = Arrays.stream(columns)
+                .map(column -> ColumnFamilyDescriptorBuilder.newBuilder(column.getBytes(StandardCharsets.UTF_8)).build())
+                .collect(Collectors.toSet());
+        TableDescriptor tableDescriptor = TableDescriptorBuilder.newBuilder(TableName.valueOf(tableName)).setColumnFamilies(columnFamilyDescriptorSet).build();
+        HbaseClientHelper.admin().createTable(tableDescriptor);
     }
 
-    public static void listTableNames() throws IOException {
-        Table test = connection.getTable(TableName.valueOf("test"));
-        Admin admin = connection.getAdmin();
+    /**
+     * 查看表
+     *
+     * @return 查询表信息
+     * @throws IOException 异常
+     */
+    public static TableName[] listTableNames() throws IOException {
+        return HbaseClientHelper.admin().listTableNames();
+    }
 
-        System.out.println(test);
+    /**
+     * 保存数据
+     *
+     * @param tableName 表名
+     */
+    public static void put(String tableName) throws IOException {
+        Table table = connection.getTable(TableName.valueOf(tableName));
+
+        Put put = new Put("wms".getBytes(StandardCharsets.UTF_8));
+        table.put(put);
+
 
     }
 
 
     public static void main(String[] args) throws IOException {
-
-        listTableNames();
+//        createTable("wms", "t1", "t2", "t3");
+//        put("test");
     }
 
 }
