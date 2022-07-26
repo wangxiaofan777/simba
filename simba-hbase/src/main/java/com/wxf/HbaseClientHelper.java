@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -31,8 +33,11 @@ public class HbaseClientHelper {
     private static final Logger logger = LoggerFactory.getLogger(HbaseClientHelper.class);
 
     private static volatile Connection connection = null;
-    private static Configuration configuration = null;
+    private static Configuration configuration;
     private static final HbaseConfig hbaseConfig;
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(10);
+
+    private static Admin ADMIN;
 
     static {
         hbaseConfig = HbaseConfig.load();
@@ -52,10 +57,11 @@ public class HbaseClientHelper {
     /**
      * 初始化
      */
-    public static Connection init() {
+    public static void init() {
         try {
             UserGroupInformation.loginUserFromKeytab(hbaseConfig.getPrincipal(), hbaseConfig.getKeytab());
-            return getConnection();
+            ADMIN = connection.getAdmin();
+            getConnection();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -78,26 +84,14 @@ public class HbaseClientHelper {
      *
      * @throws IOException 异常
      */
-    public static Connection getConnection() throws IOException {
+    public static void getConnection() throws IOException {
         if (connection == null) {
             synchronized (HbaseClientHelper.class) {
                 if (connection == null) {
-                    connection = ConnectionFactory.createConnection(configuration);
+                    connection = ConnectionFactory.createConnection(configuration, EXECUTOR_SERVICE);
                 }
             }
         }
-        return connection;
-    }
-
-
-    /**
-     * 获取admin
-     *
-     * @return admin
-     * @throws IOException 异常
-     */
-    public static Admin admin() throws IOException {
-        return connection.getAdmin();
     }
 
 
@@ -109,11 +103,21 @@ public class HbaseClientHelper {
      * @throws IOException 异常
      */
     public static void createTable(String tableName, String... columns) throws IOException {
+        if (ADMIN.tableExists(TableName.valueOf(tableName))) {
+            logger.info("table {} does not exist return", tableName);
+            return;
+        }
+
+        logger.info("create hbase table {} columns {}", tableName, columns);
         Set<ColumnFamilyDescriptor> columnFamilyDescriptorSet = Arrays.stream(columns)
                 .map(column -> ColumnFamilyDescriptorBuilder.newBuilder(column.getBytes(StandardCharsets.UTF_8)).build())
                 .collect(Collectors.toSet());
-        TableDescriptor tableDescriptor = TableDescriptorBuilder.newBuilder(TableName.valueOf(tableName)).setColumnFamilies(columnFamilyDescriptorSet).build();
-        HbaseClientHelper.admin().createTable(tableDescriptor);
+        TableDescriptor tableDescriptor = TableDescriptorBuilder
+                .newBuilder(TableName.valueOf(tableName))
+                .setColumnFamilies(columnFamilyDescriptorSet)
+                .build();
+        ADMIN.createTable(tableDescriptor);
+        logger.info("create hbase table {} success", tableName);
     }
 
     /**
@@ -123,7 +127,7 @@ public class HbaseClientHelper {
      * @throws IOException 异常
      */
     public static TableName[] listTableNames() throws IOException {
-        return HbaseClientHelper.admin().listTableNames();
+        return ADMIN.listTableNames();
     }
 
     /**
