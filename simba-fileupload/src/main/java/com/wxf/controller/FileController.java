@@ -1,6 +1,6 @@
 package com.wxf.controller;
 
-import com.wxf.service.IFileService;
+import com.wxf.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FileController {
 
-    private final IFileService fileService;
+    private final FileService fileService;
 
     @Autowired
-    public FileController(IFileService fileService) {
+    public FileController(FileService fileService) {
         this.fileService = fileService;
     }
 

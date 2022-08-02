@@ -1,13 +1,44 @@
 package com.wxf.model;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.Transient;
+import java.io.Serializable;
 
 /**
  * @author WangMaoSong
  * @date 2022/6/16 15:13
  */
 @Data
-public class Chunk {
+public class Chunk implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /***
+     * ID
+     */
+    private String id;
+
+    /**
+     * 文件块，从1开始
+     */
+    private String chunkNum;
+
+    /**
+     * 分片大小
+     */
+    private Long chunkSize;
+
+    /**
+     * 当前块大小
+     */
+    private Long currentChunkSize;
+
+    /**
+     * 文件标识
+     */
+    private String identifier;
 
     /**
      * 文件名
@@ -15,17 +46,24 @@ public class Chunk {
     private String filename;
 
     /**
-     * 序号
+     * 相对路径
      */
-    private Integer index;
+    private String relativePath;
 
     /**
-     * 分片名
+     * 总块数
      */
-    private String uuid;
+    private Integer totalChunks;
 
     /**
-     * 分片大小
+     * 文件类型
      */
-    private Long chunkSize;
+    private String type;
+
+    /**
+     * 文件
+     */
+    @Transient
+    private MultipartFile file;
+
 }

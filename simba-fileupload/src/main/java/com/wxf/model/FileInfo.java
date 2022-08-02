@@ -16,18 +16,33 @@ public class FileInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * ID
+     */
+    private Long id;
+
+    /**
      * 文件名
      */
     private String filename;
 
     /**
-     * 分片数
+     * 标识符
      */
-    private Integer chunkNum;
+    private String identifier;
 
     /**
      * 总文件大小
      */
     private long totalSize;
+
+    /**
+     * 类型
+     */
+    private String type;
+
+    /**
+     * 存放位置
+     */
+    private String location;
 
 }
