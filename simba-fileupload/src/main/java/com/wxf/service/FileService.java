@@ -1,7 +1,7 @@
 package com.wxf.service;
 
-import com.wxf.model.Chunk;
 import com.wxf.model.FileInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件Service
@@ -17,4 +17,11 @@ public interface FileService {
      * @param fileInfo 文件信息
      */
     void mergerFile(FileInfo fileInfo);
+
+    /**
+     * 多文件保存
+     *
+     * @param files 文件
+     */
+    void saveMultiFiles(MultipartFile[] files);
 }
