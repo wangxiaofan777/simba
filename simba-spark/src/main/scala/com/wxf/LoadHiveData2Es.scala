@@ -1,21 +1,30 @@
 package com.wxf
 
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.api.java.JavaRDD
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.security.UserGroupInformation
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
 import org.elasticsearch.spark.rdd.EsSpark
 
 object LoadHiveData2Es {
 
   def main(args: Array[String]): Unit = {
+    System.setProperty("java.security.krb5.conf", "D:/workspace/work2021/simba/config/krb5.conf")
+
+    val configuration = new Configuration()
+
+
+    UserGroupInformation.setConfiguration(configuration)
+
+    UserGroupInformation.loginUserFromKeytab("admin/admin@HADOOP.COM", "D:/workspace/work2021/simba/config/admin.keytab")
+
     val conf = new SparkConf()
     conf.set("es.nodes", "10.50.30.177")
     conf.set("es.port", "9500")
     conf.set("es.index.auto.create", "true")
-    val session: SparkSession = SparkSession.builder().config(conf).appName("LoadHiveData2Es").master("yarn").enableHiveSupport().getOrCreate()
-    val javaRDD: JavaRDD[Row] = session.sql("select * from cmk.tablea;").toJavaRDD
-    val rdd: JavaRDD[Map[String, String]] = javaRDD.map(x => {
+    val session = SparkSession.builder().config(conf).appName("LoadHiveData2Es").master("local").enableHiveSupport().getOrCreate()
+    val javaRDD = session.sql("select * from cmk.tablea;").toJavaRDD
+    val rdd = javaRDD.map(x => {
       Map(
         "phone" -> x.getAs[String]("phone"),
         "dt" -> x.getAs[String]("dt"),
