@@ -29,6 +29,7 @@
         <module>simba-go</module>
         <module>simba-auth-server</module>
         <module>simba-order-service</module>
+        <module>simba-sharding</module>
     </modules>
     <packaging>pom</packaging>
 
