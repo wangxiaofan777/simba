@@ -41,8 +41,10 @@ object GroupByTest {
     println(pairs1.toDebugString)
     val results = pairs1.groupByKey(numReducers)
     println(results)
+    // 不同Key的总个数
     println(results.count())
     println(results.toDebugString)
+    spark.stop()
   }
 
 
