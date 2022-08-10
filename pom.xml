@@ -30,6 +30,8 @@
         <module>simba-auth-server</module>
         <module>simba-order-service</module>
         <module>simba-sharding</module>
+        <module>simba-minio</module>
+        <module>simba-datahub</module>
     </modules>
     <packaging>pom</packaging>
 
