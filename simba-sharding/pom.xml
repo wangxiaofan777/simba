@@ -26,11 +26,10 @@
         </dependency>
 
         <!-- shardingsphere-jdbc-core-spring-boot-starter -->
-       <!-- <dependency>
+        <dependency>
             <groupId>org.apache.shardingsphere</groupId>
             <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
-            <version>5.1.2</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

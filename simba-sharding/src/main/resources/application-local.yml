@@ -4,5 +4,24 @@ server:
 spring:
   application:
     name: simba-sharding
+  shardingsphere:
+    datasource:
+      names: sharding_ds_01, sharding_ds_02
+      sharding_ds_01:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://10.50.30.178:13306/sharding_ds_01?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false
+        username: root
+        password: Lygr@0907
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      sharding_ds_02:
+        type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://10.50.30.178:13306/sharding_ds_02?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false
+          username: root
+          password: Lygr@0907
+          driver-class-name: com.mysql.cj.jdbc.Driver
+    rules:
+      sharding:
+        tables:
+
 
 
