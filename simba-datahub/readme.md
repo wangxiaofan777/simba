@@ -64,7 +64,14 @@ sink:
 datahub ingest -c recipe.yml
 ```
 
+* 导入样本数据
+
+```shell
+datahub docker ingest-sample-data
+```
+
 * 浏览器访问。datahub/datahub
+
 ```shell
 http://10.50.30.177:9002
 ```
