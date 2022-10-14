@@ -32,6 +32,7 @@
         <module>simba-sharding</module>
         <module>simba-minio</module>
         <module>simba-datahub</module>
+        <module>simba-zookeeper</module>
     </modules>
     <packaging>pom</packaging>
 
