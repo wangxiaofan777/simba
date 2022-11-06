@@ -33,6 +33,7 @@
         <module>simba-minio</module>
         <module>simba-datahub</module>
         <module>simba-zookeeper</module>
+        <module>simba-rtmp</module>
     </modules>
     <packaging>pom</packaging>
 
