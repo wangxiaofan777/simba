@@ -34,6 +34,7 @@
         <module>simba-datahub</module>
         <module>simba-zookeeper</module>
         <module>simba-rtmp</module>
+        <module>spark-local</module>
     </modules>
     <packaging>pom</packaging>
 
