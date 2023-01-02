@@ -35,6 +35,7 @@
         <module>simba-zookeeper</module>
         <module>simba-rtmp</module>
         <module>spark-local</module>
+        <module>simba-quartz</module>
     </modules>
     <packaging>pom</packaging>
 
