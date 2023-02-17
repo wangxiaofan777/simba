@@ -1,0 +1,8 @@
+server:
+  port: 9003
+  servlet:
+    context-path: /simba-sharding
+
+spring:
+  profiles:
+    active: local

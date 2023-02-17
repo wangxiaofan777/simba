@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: simba-auth
+  profiles:
+    active: dev
+
+
+
+# mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml                                # XML
+  type-aliases-package: com.wxf.simba.auth.entity           # entity检查路劲
+  check-config-location: true                               # 是否检查xml文件
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID                                    # 默认使用雪花ID
+      logic-delete-field: deleted                           # 逻辑删除字段
+      logic-delete-value: 1                                 # 逻辑删除是
+      logic-not-delete-value: 0                             # 逻辑删除否
+#      schema: classpath:/sql/simba_auth.sql                  # Schema
+  configuration:
+    map-underscore-to-camel-case: true                      # 自动驼峰转换
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 打印SQL
+  type-enums-package: com.wxf.simba.auth.enums              # 枚举扫描类
+
+# 日志配置文件
+logging:
+  config: classpath:log4j2.xml

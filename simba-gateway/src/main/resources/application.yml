@@ -1,0 +1,19 @@
+server:
+  port: 9003
+  servlet:
+    context-path: /simba_gateway
+
+spring:
+  application:
+    name: simba_gateway
+  cloud:
+    gateway:
+      enabled: true
+      routes:
+        - id: baidu
+          uri: http://www.baidu.com
+          predicates:
+            - After=2018-12-25T14:33:47.789+08:00
+#            - Path=/baidu/**
+#            - Weight=1
+          order: 0

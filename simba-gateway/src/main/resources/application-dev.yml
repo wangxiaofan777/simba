@@ -1,0 +1,13 @@
+server:
+  port: 9003
+
+spring:
+  cloud:
+    gateway:
+      enabled: true
+      routes:
+        - id: baidu
+          uri: https://www.baidu.com
+          predicates:
+            - Path=/baidu/*
+

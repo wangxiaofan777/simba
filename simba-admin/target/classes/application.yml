@@ -1,0 +1,8 @@
+server:
+  port: 9002
+  servlet:
+    application-display-name: ${spring.application.name}
+    context-path: /simba_admin
+spring:
+  application:
+    name: SimbaAdmin

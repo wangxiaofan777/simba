@@ -1,0 +1,71 @@
+server:
+  port: ${SERVER_PORT:9001}
+  servlet:
+    context-path: /simba_auth
+
+spring:
+  application:
+    name: simba-auth
+  # 数据源
+  datasource:
+    url: jdbc:mysql://10.50.30.178:13306/simba_auth?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&useSSL=false
+    username: root
+    password: Lygr@0907
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 500
+      max-lifetime: 18000000
+      minimum-idle: 30
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      pool-name: HiKariDataSource
+      type: com.zaxxer.hikari.HikariDataSource
+      idle-timeout: 180000
+      auto-commit: true
+  redis:
+    url: 10.50.30.179
+    username: admin
+    password: lygr@0907
+    port: 6379
+    connect-timeout: 30000
+  # 缓存
+  cache:
+    redis:
+      # 是否可以缓存空值
+      cache-null-values: true
+      # 是否开启前缀使用前缀名
+      use-key-prefix: true
+      # 是否使用统计
+      enable-statistics: true
+      # key前缀名
+      key-prefix: ${spring.application.name}_
+      # 缓存时间
+      time-to-live: 10d
+    type: redis
+  boot:
+    admin:
+      client:
+        url: http://127.0.0.1:9002/simba_admin
+
+# 日志配置
+logging:
+  config: classpath:log4j2.xml
+
+# 暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+      show-details: ALWAYS
+    logfile:
+      enabled: true
+      external-file: D:\workspace\work2021\simba\simba-auth\logs\simba_auth-info.log
+
+
+
+
+

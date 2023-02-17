@@ -1,0 +1,21 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /simba-fileupload
+
+
+spring:
+  application:
+    name: simba-fileupload
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB # 指定文件上传的最大大小
+      max-request-size: 200MB # 请求允许的大小
+      location: /data # 存储上传文件的位置，未指定时，使用临时目录
+      resolve-lazily: true # 标识当文件和参数被访问的时候再被解析成文件
+      file-size-threshold: 10MB # 文件写入磁盘的大小阈值
+
+file:
+  temp:
+    dir: D:/tmp/file-upload
