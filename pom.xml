@@ -63,7 +63,7 @@
         <hbase.version>2.1.0-cdh6.3.2</hbase.version>
         <hocon.version>1.4.2</hocon.version>
         <log4j2.version>2.17.2</log4j2.version>
-        <netty.version>4.1.78.Final</netty.version>
+        <netty.version>4.1.90.Final</netty.version>
         <shardingsphere-jdbc.version>5.1.2</shardingsphere-jdbc.version>
         <junit.version>4.13.2</junit.version>
     </properties>
