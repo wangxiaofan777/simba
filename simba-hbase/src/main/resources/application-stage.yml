@@ -1,0 +1,35 @@
+
+# Hive
+hive:
+  enabled: false
+  driverName: org.apache.hive.jdbc.HiveDriver
+  url: jdbc:hive2://optimus40a6:10000/wms;principal=hive/_HOST@HADOOP.COM;kerberosAuthType=kerberos
+  props:
+    maximum-pool-size: 500
+    max-lifetime: 18000000
+    minimum-idle: 30
+    connection-timeout: 30000
+    connection-test-query: SELECT 1
+    pool-name: HiKariDataSource
+    type: com.zaxxer.hikari.HikariDataSource
+    idle-timeout: 180000
+    auto-commit: true
+
+
+# HBASE
+hbase:
+  enabled: false
+  zookeeperQuorum: optimus40a6,optimus40a7,optimus40a8
+  zookeeperPort: 2181
+  zookeeperParent: /hbase
+  masterPrincipal: hbase/_HOST@HADOOP.COM
+  regionServerPrincipal: hbase/_HOST@HADOOP.COM
+# kerberos
+kerberos:
+  # 是否开启认证
+  auth: false
+  authentication: kerberos
+  principal: admin/admin@HADOOP.COM
+  keytab: ${KERBEROS_PATH}/admin.keytab
+  krb5Conf: ${KERBEROS_PATH}/krb5.conf
+  interval: 30m                                             # 刷新时间
