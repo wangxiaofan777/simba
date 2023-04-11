@@ -24,11 +24,12 @@ object LoadCsv2Mongo {
       .option("nullValue", "?")
       //          表示有表头，若没有则为false
       .option("header", true)
-      .csv("D:/tmp/zyxj_2022081701_md5_market.csv")
+      .csv("D:/tmp/part-00000-247d6e71-50b9-4135-846b-2892c2c646c4.csv")
 
     df.show()
 
     df.write.format("mongodb").mode("overwrite").save()
+
 
     spark.stop()
   }

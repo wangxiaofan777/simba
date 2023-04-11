@@ -16,9 +16,10 @@ object LoadHive2Mongo {
       .getOrCreate()
 
 
-    val df = spark.sql(s"select * from $tableName")
+    val df = spark.sql(s"select * from cmk.tablea")
 
     df.show()
+
 
     df.write.format("mongodb").mode("overwrite").save()
 
