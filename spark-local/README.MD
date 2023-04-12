@@ -11,6 +11,7 @@ spark3-submit --class com.wxf.LoadHive2Mongo \
               --executor-cores 1 \
               --queue root.users.admin \
               --num-executors 1 \
+              --jars /home/wms/mongo-spark-connector_2.12-10.1.0.jar \
               /home/wms/spark-local-1.0-SNAPSHOT.jar
-              
+  
 ```
