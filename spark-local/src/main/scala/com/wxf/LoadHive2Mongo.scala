@@ -8,8 +8,8 @@ object LoadHive2Mongo {
 
     val tableName = "ads.variable_extraction_1"
     val spark = SparkSession.builder()
-//      .master("local")
-//      .appName("MongoSparkConnectorIntro")
+      //      .master("local")
+      //      .appName("MongoSparkConnectorIntro")
       .config("spark.mongodb.read.connection.uri", "mongodb://admin:admin@10.50.17.191:29000/wms.wms?authSource=admin")
       .config("spark.mongodb.write.connection.uri", "mongodb://admin:admin@10.50.17.191:29000/wms.wms?authSource=admin")
       .enableHiveSupport()
@@ -19,7 +19,8 @@ object LoadHive2Mongo {
     val df = spark.sql(s"select * from cmk.tablea")
 
     df.show()
-
+    val applicationId = spark.sparkContext.applicationId
+    print(s"Yarn Id: $applicationId")
 
     df.write.format("mongodb").mode("overwrite").save()
 
